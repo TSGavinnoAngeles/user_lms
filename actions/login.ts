@@ -7,6 +7,7 @@ import { AuthError } from "next-auth";
 
 export const Login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedForm = LoginSchema.safeParse(values);
+
   if (!validatedForm.success) {
     console.log("Meh");
     return { error: "Invalidated Fields!" };

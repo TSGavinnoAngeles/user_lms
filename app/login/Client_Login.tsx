@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "../schema";
@@ -19,9 +19,7 @@ export const LoginForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
-  const toReg = () => {
-    router.push("/register");
-  };
+  const [email, setEmail] = useState("");
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -31,36 +29,45 @@ export const LoginForm = () => {
     },
   });
 
+  useEffect(() => {
+    if (email === undefined) {
+      setError("Email is required");
+      console.log("Email is required");
+    }
+  }, [email]);
+
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
     setSuccess("");
 
+    // If it's not, proceed with the registration
     startTransition(() => {
-      toast.promise(
-        Login(values).then((data) => {
-          if (data && data.error) {
-            setError(data.error as string); // Specify the type of 'error' as 'string'
-            console.log(data.error);
-            throw new Error(data.error as string);
-          }
-          setSuccess(data?.message);
-          console.log(data?.message);
-          return data?.message;
-        }),
-
-        {
-          loading: "Registering...",
-          success: (data) => <b> {data} </b>,
-          error: (err) => <b> {err.message} </b>,
+      const registry = Login(values).then((data) => {
+        if (data && data.error) {
+          setError(data.error as string);
+          console.log(data.error);
+          throw new Error(data.error as string);
         }
-      );
+        if (data instanceof z.ZodError) {
+          setError(data.errors[0].message);
+        }
+        setSuccess(data?.message);
+        console.log(data?.message);
+        return data?.message;
+      });
+      toast.promise(registry, {
+        loading: "Registering...",
+        success: (data) => <b> {data} </b>,
+        error: (err) => <b> {err.message} </b>,
+      });
     });
   };
 
   return (
     <>
       <div className=" card lg:card flex flex-column border-spacing-0 ml-96">
-        {/* <Toaster position="bottom-right" reverseOrder={false} /> */}
+        <Toaster position="bottom-right" reverseOrder={false} />
+        {/* {error && <div className="text-red-500 text-2xl">{error}</div>} */}
         <div className=" shadow-inner p-2 rounded-sm border-b-4 border-r-4 border-t-4 border-l-4 border-t-neutral-200 border-l-neutral-200 bg-neutral-300  ">
           <div className=" grid-flow-col gap-2 card-title text-xl font-bold text-center outline outline-2 p-1 text-mikado_yellow-900 bg-neon_blue-200 ">
             <h1 className="">Login.exe</h1>
@@ -75,14 +82,16 @@ export const LoginForm = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space y-6">
               <div className="space y-4 ">
                 <input
+                  required
                   {...form.register("email")}
                   disabled={isPending}
                   type="text"
-                  placeholder="E-mail Address or Username"
+                  placeholder="example@seneca.com"
                   className="w-full p-2 my-2 "
                 />
                 <div className="flex flex-row">
                   <input
+                    required
                     disabled={isPending}
                     {...form.register("password")}
                     type={showPassword ? "text" : "password"}
@@ -91,7 +100,6 @@ export const LoginForm = () => {
                   />
                 </div>
               </div>
-              {error && <div className="text-red-500 text-2xl">{error}</div>}
               <div className=" my-1 p-1 outline outline-1 border-r-2 border-b-2 border-t-2 border-l-2 border-l-neutral-50 border-t-neutral-50 hover:bg-neutral-500 ">
                 <button
                   disabled={isPending}

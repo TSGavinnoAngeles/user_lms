@@ -3,7 +3,7 @@ import React from "react";
 
 const Navbar = () => {
   return (
-    <div className="navbar bg-nyanza-900 bg-no-repeat bg-center text-black ">
+    <div className="navbar bg-nyanza-900 bg-no-repeat bg-center text-black border-b-2 border-b-rich_black-100">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden ">
@@ -45,7 +45,12 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">Seneca</a>
+        <a className="btn btn-ghost text-xl">
+          <img
+            src="/Logo/Seneca-Photoroom.png"
+            className="w-[125%]  h-[125%] z=50"
+          />
+        </a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
@@ -72,17 +77,10 @@ const Navbar = () => {
       </div>
       <div className="navbar-end">
         <a
-          href="/login"
-          className="btn mx-5 outline outline-3 bg-mikado_yellow-500 "
-        >
-          Log in{" "}
-        </a>
-
-        <a
-          href="/register"
+          href="/settings"
           className="btn mx-5 outline outline-3 bg-mikado_yellow-500"
         >
-          Create an account today!
+          Account Settings
         </a>
       </div>
     </div>

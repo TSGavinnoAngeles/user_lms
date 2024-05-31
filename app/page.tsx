@@ -1,6 +1,6 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Landing Page/Navbar";
 import IntroHero from "./components/Landing Page/IntroHero";
 import Testimonials from "./components/Landing Page/Testimonials";
 import MisVis from "./components/Landing Page/MisVis";
