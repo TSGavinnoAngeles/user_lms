@@ -14,11 +14,14 @@ const Dashboard = async () => {
       <Navbar />
       <div className="flex">
         <Side />
-        <div className="shadow-lg p-8 rounded-lg bg-zinc-300/10 flex flex-col gap-2 my-6 place-item-center ml-64">
+        <div className="shadow-lg rounded-lg bg-zinc-300/10 flex flex-col gap-2 my-6 place-item-center ml-64">
           <div>
             <span className="font-bold"> Welcome Back, {firstName}!</span>
           </div>
         </div>
+      </div>
+      <div className="shadow-inner rounded-lg bg-zinc-300/10 flex flex-col gap-2 my-6 place-item-center ml-64 border-b-persian_blue-100 border-b-8">
+        Your Current Courses:
       </div>
     </>
   );
