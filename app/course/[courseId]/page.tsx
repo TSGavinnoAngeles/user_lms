@@ -42,11 +42,7 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
                 Publihed by: {courses?.publisher}
               </h2>
               <p>{courses?.description}</p>
-              <div className="justify-start flex flex-row py-6">
-                <button className="btn bg-mikado_yellow-500 outline outline-2">
-                  Enroll now!
-                </button>
-              </div>
+              <div className="justify-start flex flex-row py-6"></div>
             </div>
           </div>
         </div>
