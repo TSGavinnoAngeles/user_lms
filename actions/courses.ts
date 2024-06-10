@@ -5,7 +5,6 @@ import { CourseSchema, UpdateCourseSchema } from "@/schema";
 import { connectToDB } from "@/app/lib/db";
 import Course from "@/app/models/courses";
 import { auth } from "@/auth";
-import { revalidatePath } from "next/cache";
 
 export interface Course {
   _id: string;

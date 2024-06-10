@@ -4,23 +4,37 @@ import React, { useEffect, useState } from "react";
 import { get_One_Course } from "@/actions/courses";
 import { Course } from "@/actions/courses";
 import Navbar from "@/app/components/Dashboard/Navbar";
+import EnrollmentModal from "@/app/components/CourseCaatComps/EnrollmentModal";
+import { get_Enrollments } from "@/actions/enroll";
 
 const Editor = ({ params }: { params: { courseId: string } }) => {
   const [courses, setCourses] = useState<Course>();
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
       const result = await get_One_Course(params.courseId);
-      if ("error" in result) {
+      if (result.error) {
         console.error(result.error);
       } else {
         setCourses(result);
       }
     };
-    fetchCourses();
-  }, []);
+    const isStudentEnrolled = async () => {
+      const enrollments = await get_Enrollments(params.courseId);
+      if (enrollments) {
+        setIsEnrolled(true);
+      } else {
+        setIsEnrolled(false);
+      }
+    };
 
-  return (
+    fetchCourses();
+    isStudentEnrolled();
+  }, [params.courseId, isModalOpen]);
+
+  return courses?.status === "Published" ? (
     <div>
       <Navbar />
       <div
@@ -43,6 +57,32 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
               </h2>
               <p>{courses?.description}</p>
               <div className="justify-start flex flex-row py-6"></div>
+              <div>
+                {isEnrolled ? (
+                  <button
+                    disabled={true}
+                    className="btn bg-mikado_yellow-500 outline outline-2 "
+                  >
+                    <a className="text-rich_black-100">
+                      {" "}
+                      {`You're already enrolled in ${courses?.name}`}
+                    </a>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() =>
+                      (
+                        document?.getElementById(
+                          `open_modal_enrollment`
+                        ) as HTMLDialogElement
+                      )?.showModal()
+                    }
+                    className="btn bg-mikado_yellow-500 outline outline-2"
+                  >
+                    Enroll in {courses?.name} Now!
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -124,6 +164,39 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
               Vivamus ac vulputate nisl, vel maximus turpis. Curabitur blandit
               nulla nec dolor vehicula eleifend.
             </p>
+          </div>
+        </div>
+      </div>
+      <dialog id="open_modal_enrollment" className="modal">
+        <EnrollmentModal
+          courseId={params.courseId}
+          name={courses?.name || "--"}
+          setIsModalOpen={setIsModalOpen}
+        />
+      </dialog>
+    </div>
+  ) : (
+    <div>
+      <Navbar />
+      <div
+        className="hero min-h-[653px] z-0 outline outline-1"
+        style={{
+          backgroundImage:
+            "url('https://images.pexels.com/photos/327482/pexels-photo-327482.jpeg')",
+          // backgroundRepeat: "repeat",
+          // backgroundSize: "cover",
+        }}
+      >
+        <div className="hero-content flex-col lg:flex-row-reverse ">
+          <div className="card w-100 bg-nyanza-900">
+            <div className="card-body">
+              <h2 className="card-title text-5xl">
+                WHOOPS THIS COURSE IS YET TO BE PUBLISHED
+              </h2>
+              <h2 className="card-title text-2xl">
+                Take note of the ID! It might be available sometime soon
+              </h2>
+            </div>
           </div>
         </div>
       </div>

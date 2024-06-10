@@ -32,18 +32,18 @@ export const RegiForm = () => {
       toast.promise(
         Register(values).then((data) => {
           if (data && data.error) {
-            setError(data.error as string); // Specify the type of 'error' as 'string'
+            setError(data.error as string);
             console.log(data.error);
             throw new Error(data.error as string);
           }
-          setSuccess(data?.message);
+          setSuccess(data?.message || "");
           console.log(data?.message);
-          return data?.message;
+          return data?.message || "";
         }),
 
         {
           loading: "Registering...",
-          success: (data) => <b> {data} </b>,
+          success: (data: string) => <b> {data} </b>,
           error: (err) => <b> {err.message} </b>,
         }
       );

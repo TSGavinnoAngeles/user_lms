@@ -21,3 +21,13 @@ export const RegisterSchema = z.object({
     message: "First and Lastname is required",
   }),
 });
+
+export const enrollStudentSchema = z.object({
+  courseName: z.string().min(1, {
+    message: "Course name is required",
+  }),
+  // student: z.string().min(1, {
+  //   message: "Student is required",
+  // }),
+  // status: EnrollmentStatus,
+});

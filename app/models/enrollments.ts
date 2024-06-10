@@ -2,14 +2,8 @@ import mongoose, { Schema } from "mongoose";
 
 const EnrollmentSchema = new mongoose.Schema(
   {
-    student: {
-      type: Schema.Types.ObjectId,
-      required: true,
-    },
-    course: {
-      type: Schema.Types.ObjectId,
-      required: true,
-    },
+    student: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Ensure the ref matches your User model
+    course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
     status: {
       type: String,
       enum: ["ONGOING", "COMPLETED", "DROPPED"],

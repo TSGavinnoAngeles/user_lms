@@ -5,7 +5,6 @@ import User from "../app/models/user";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import { connectToDB } from "@/app/lib/db";
-import { error } from "console";
 
 export const Register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedForm = RegisterSchema.safeParse(values);
