@@ -1,7 +1,9 @@
 "use server";
 import { connectToDB } from "@/app/lib/db";
-import User from "@/app/models/user";
-import { auth } from "@/auth";
+import User from "@/models/user";
+import { auth, signOut } from "@/auth";
+import Enrollment from "@/models/enrollments";
+import { revalidatePath } from "next/cache";
 
 export const searchStudent = async () => {
   const session = await auth();
@@ -20,22 +22,32 @@ export const delStudent = async () => {
   const session = await auth();
   try {
     await connectToDB();
-    if (session?.user) {
-      return { error: "Missing Field" };
-    }
-    // const delStud = await User.findOneAndDelete({
-    //   name: session?.user?.name,
-    //   email: session?.user?.email,
-    // });
-
-    const delStud = await User.findOne({
+    const student = await User.findOne({
       name: session?.user?.name,
       email: session?.user?.email,
     });
-    const data = JSON.parse(JSON.stringify(delStud));
+
+    if (student.role === "admin") {
+      return { error: "Admin cannot unenroll" };
+    }
+    const data = JSON.parse(JSON.stringify(student));
+    console.log(data);
+
+    // Delete the enrollments associated with the student
+    if (student) {
+      await Enrollment.deleteMany({ student: student._id });
+      await User.deleteOne({ _id: student._id });
+      try {
+        await signOut();
+        console.log("Student deleted successfully");
+        return data;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     return data;
   } catch (error) {
     console.error(error);
-    throw error;
   }
 };

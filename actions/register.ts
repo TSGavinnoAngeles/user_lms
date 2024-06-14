@@ -1,7 +1,7 @@
 "use server";
 import * as z from "zod";
 import { RegisterSchema } from "@/app/schema";
-import User from "../app/models/user";
+import User from "../models/user";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import { connectToDB } from "@/app/lib/db";
@@ -29,9 +29,15 @@ export const Register = async (values: z.infer<typeof RegisterSchema>) => {
     if (existingUser || toLowerUser) {
       return { error: "User already exists!" };
     } else if (!validator.isEmail(email)) {
-      return { error: "Invalid Email!" };
+      return {
+        error:
+          "Invalid Email detected make sure to have an @domain.com at the end",
+      };
     } else if (!validator.isStrongPassword(password)) {
-      return { error: "Weak Password" };
+      return {
+        error:
+          "The password should at least have 6 letters, one number, one special character, and one Capital letter",
+      };
     }
     const hashedPass = await bcrypt.hash(password, 10);
 

@@ -1,5 +1,7 @@
 import React from "react";
 import { auth, signOut } from "@/auth";
+import { delStudent } from "@/actions/student";
+import Delete from "../components/Settings Page/Delete";
 
 const SettingsPage = async () => {
   const session = await auth();
@@ -13,22 +15,25 @@ const SettingsPage = async () => {
           <div>
             E-mail: <span className="font-bold">{session?.user?.email}</span>
           </div>
-          <form
-            action={async () => {
-              "use server";
-              await signOut();
-            }}
-          >
-            <div className="justify-between">
-              <button
-                type="submit"
-                className="bg-red-500 text-white font-bold px-6 py-2 mt-3"
-              >
-                {" "}
-                logout
-              </button>
-            </div>
-          </form>
+          <div className="flex flex-row gap-5">
+            <form
+              action={async () => {
+                "use server";
+                await signOut();
+              }}
+            >
+              <div className="justify-between">
+                <button
+                  type="submit"
+                  className="btn bg-mikado_yellow-500 outline outline-2 "
+                >
+                  {" "}
+                  Logout
+                </button>
+              </div>
+            </form>
+            <Delete />
+          </div>
         </div>
       </div>
     </>

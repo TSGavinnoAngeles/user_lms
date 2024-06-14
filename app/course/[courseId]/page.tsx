@@ -5,14 +5,20 @@ import { get_One_Course } from "@/actions/courses";
 import { Course } from "@/actions/courses";
 import Navbar from "@/app/components/Dashboard/Navbar";
 import EnrollmentModal from "@/app/components/CourseCaatComps/EnrollmentModal";
+import UnenrollmentModal from "@/app/components/CourseCaatComps/UnenrollmentModal";
 import { get_Enrollments } from "@/actions/enroll";
-
+import { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 const Editor = ({ params }: { params: { courseId: string } }) => {
+  const router = useRouter();
   const [courses, setCourses] = useState<Course>();
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    if (courses) {
+      return;
+    }
     const fetchCourses = async () => {
       const result = await get_One_Course(params.courseId);
       if (result.error) {
@@ -36,38 +42,61 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
 
   return courses?.status === "Published" ? (
     <div>
+      <Toaster />
       <Navbar />
       <div
         className="hero min-h-[700px] z-0 outline outline-1"
         style={{
-          backgroundImage:
-            "url('https://images.pexels.com/photos/327482/pexels-photo-327482.jpeg')",
+          backgroundImage: "url('/Wallpapers/blueCitypop.png')",
           // backgroundRepeat: "repeat",
           // backgroundSize: "cover",
         }}
       >
-        <div className="hero-content flex-col lg:flex-row-reverse ">
-          <div className="card w-100 bg-nyanza-900">
+        <div className="hero-content flex-col lg:flex-row-reverse  ">
+          <div className="card w-100 bg-citypop-200 outline outline-2 bg-opacity-95   shadow-[10px_10px_0_0_]">
+            <div className="border-b-2 bg-citypop-300 h-6 flex flex-row-reverse  ">
+              <button className="border-2 bg-citypop-400 w-7 m-2 rounded-full  ">
+                {" "}
+              </button>
+              <button className="border-2 bg-citypop-600 w-7 m-2 rounded-full ">
+                {" "}
+              </button>
+            </div>
             <div className="card-body">
               <h2 className="card-title text-5xl">
                 Welcome to {courses?.name}
               </h2>
               <h2 className="card-title text-2xl">
-                Publihed by: {courses?.publisher}
+                Publihed by: {courses?.publisher.name}
               </h2>
               <p>{courses?.description}</p>
               <div className="justify-start flex flex-row py-6"></div>
               <div>
                 {isEnrolled ? (
-                  <button
-                    disabled={true}
-                    className="btn bg-mikado_yellow-500 outline outline-2 "
-                  >
-                    <a className="text-rich_black-100">
+                  <div className="space-x-24">
+                    <button
+                      disabled={true}
+                      className="btn bg-mikado_yellow-500 outline outline-2 "
+                    >
+                      <a className="text-rich_black-100">
+                        {" "}
+                        {`You're already enrolled in ${courses?.name}`}
+                      </a>
+                    </button>
+                    <button
+                      onClick={() =>
+                        (
+                          document?.getElementById(
+                            `open_unenroll_modal`
+                          ) as HTMLDialogElement
+                        )?.showModal()
+                      }
+                      className="btn bg-bittersweet_shimmer outline outline-2 "
+                    >
                       {" "}
-                      {`You're already enrolled in ${courses?.name}`}
-                    </a>
-                  </button>
+                      Would You like to unenroll?
+                    </button>
+                  </div>
                 ) : (
                   <button
                     onClick={() =>
@@ -90,7 +119,6 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
 
       <div className="grid place-items-center bg-nyanza-800 text-3xl py-9 min-w-screen space-y-1">
         <div className="collapse bg-nyanza-800 max-w-[75%] outline outline-2 p-1 ">
-          <input type="checkbox" />
           <div className="collapse-title text-3xl font-semibold">
             {courses?.name} Syllabus
             <p className="text-xl mx-5 mt-2">
@@ -101,8 +129,8 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
         </div>
         <div className="collapse collapse-arrow bg-nyanza-800 max-w-[75%] outline outline-2 ">
           <input type="checkbox" />
-          <div className="collapse-title text-3xl font-semibold">
-            Module 1: Huh?
+          <div className="flex flex-row collapse-title text-3xl font-semibold justify-between">
+            <div> Module 1: Introduction to {courses?.name} </div>
           </div>
           <div className="collapse-content text-xl">
             <p>
@@ -122,6 +150,13 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
               erat metus, ac pellentesque felis condimentum ac.
             </p>
           </div>
+          <button
+            type="button"
+            className="btn bg-mikado_yellow-500 outline outline-2"
+            onClick={() => router.push(`/course/${params.courseId}/modules/1`)}
+          >
+            Go to Lesson 1
+          </button>
         </div>
         <div className="collapse collapse-arrow bg-nyanza-800 max-w-[75%] outline outline-2 ">
           <input type="checkbox" />
@@ -174,6 +209,14 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
           setIsModalOpen={setIsModalOpen}
         />
       </dialog>
+
+      <dialog id="open_unenroll_modal" className="modal">
+        <UnenrollmentModal
+          courseId={params.courseId}
+          name={courses?.name || "--"}
+          setIsModalOpen={setIsModalOpen}
+        />
+      </dialog>
     </div>
   ) : (
     <div>
@@ -188,6 +231,7 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
         }}
       >
         <div className="hero-content flex-col lg:flex-row-reverse ">
+          <Toaster />
           <div className="card w-100 bg-nyanza-900">
             <div className="card-body">
               <h2 className="card-title text-5xl">

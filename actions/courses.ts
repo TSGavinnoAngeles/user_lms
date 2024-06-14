@@ -1,22 +1,27 @@
 "use server";
 import * as z from "zod";
 import { CourseSchema, UpdateCourseSchema } from "@/schema";
-
 import { connectToDB } from "@/app/lib/db";
-import Course from "@/app/models/courses";
+import Course from "@/models/courses";
 import { auth } from "@/auth";
+import User from "@/models/user";
 
 export interface Course {
   _id: string;
   name: string;
   courseId: string;
   description: string;
-  publisher: string;
+  publisher: Publisher;
   createdAt: Date;
   updatedAt: Date;
   status: string;
   sub_Mode: string;
   price: number;
+}
+
+export interface Publisher {
+  name: string;
+  email: string;
 }
 
 export const CreateCourse = async (values: z.infer<typeof CourseSchema>) => {
@@ -47,12 +52,23 @@ export const CreateCourse = async (values: z.infer<typeof CourseSchema>) => {
     if (!name || !courseId || !description) {
       return { error: "Missing Field" };
     }
+    if (!session?.user) {
+      return { error: "Unauthorized" };
+    }
+    const author = await User.findOne({
+      name: session.user.name,
+      email: session.user.email,
+    });
+    console.log(author);
 
     await Course.create({
       name,
       courseId,
       description,
-      publisher: session?.user?.name,
+      publisher: {
+        name: author?.name,
+        email: author?.email,
+      },
       status: "Unpublished",
       sub_Mode: "Free",
       price: 0,
@@ -80,8 +96,14 @@ export const del_Course = async (id: string) => {
 export const get_One_Course = async (id: string) => {
   try {
     await connectToDB();
-    const courses = await Course.findOne({ courseId: id });
-    const data = JSON.parse(JSON.stringify(courses));
+    const courses = await Course.findOne({ courseId: id }).populate(
+      "publisher"
+    );
+
+    const popCourse = await Course.findById(courses._id);
+    console.log(popCourse);
+    const data = JSON.parse(JSON.stringify(popCourse));
+
     return data;
   } catch (error) {
     console.error(error);
@@ -94,6 +116,7 @@ export const getCourses = async (): Promise<Course[]> => {
 
   try {
     const courses = await Course.find({});
+    console.log(courses);
     const data = JSON.parse(JSON.stringify(courses));
     return data;
   } catch (error) {

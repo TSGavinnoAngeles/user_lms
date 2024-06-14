@@ -1,9 +1,19 @@
 "use client";
 import React from "react";
+import { useRouter, redirect } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   return (
-    <div className="navbar bg-nyanza-900 bg-no-repeat bg-center text-black border-b-2 border-b-rich_black-100">
+    <div
+      className="navbar text-black border-b-2 border-b-rich_black-100 h-0.5"
+      style={{
+        backgroundImage: "url('/Wallpapers/citypop.jpg')",
+        backgroundRepeat: "repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "right 10px top 23%",
+      }}
+    >
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden ">
@@ -47,8 +57,9 @@ const Navbar = () => {
         </div>
         <a className="btn btn-ghost text-xl">
           <img
-            src="/Logo/Seneca-Photoroom.png"
-            className="w-[125%]  h-[125%] z=50"
+            onClick={() => router.push("/dashboard")}
+            src="/Logo/logo2White.png"
+            className="w-[125%]  h-[125%]"
           />
         </a>
       </div>
@@ -78,7 +89,7 @@ const Navbar = () => {
       <div className="navbar-end">
         <a
           href="/settings"
-          className="btn mx-5 outline outline-3 bg-mikado_yellow-500"
+          className="btn mx-5 outline outline-3 bg-mikado_yellow-500 "
         >
           Account Settings
         </a>

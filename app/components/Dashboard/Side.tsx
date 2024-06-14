@@ -4,33 +4,53 @@ import { useRouter } from "next/navigation";
 
 const Side = () => {
   const router = useRouter();
+
   return (
-    <div className=" fixed min-h-screen bg-nyanza-900  rounded--xl z-50">
-      <div className="ml-5 pt-5">
+    <div className="w-auto h-2/3 rounded-xl flex flex-col justify-between outline outline-2 ">
+      <div className="">
         <div className="flex flex-col">
-          <ul className="menu bg-beutral-50 w-56 rounded-box space-y-1 font-bold text-xl">
+          <a className="btn btn-ghost">
+            <img
+              onClick={() => router.push("/dashboard")}
+              src="/Logo/logo2.png "
+              className="w-auto h-[125%]"
+            />
+          </a>
+          <div className="divider"></div>
+          <ul className="menu rounded-box space-y-5 font-bold text-xl place-items-start tooltip">
             {" "}
             <li>
-              <div className="flex flex-row space-x-2">
-                <button
-                  onClick={() => {
-                    router.push("/courseCaat");
-                  }}
-                  className=" rounded-none "
-                >
-                  {" "}
-                  Course Catalog
-                </button>
-              </div>
+              <button
+                onClick={() => {
+                  router.push("/courseCaat");
+                }}
+                className=" w-full"
+              >
+                {" "}
+                More Courses
+              </button>
             </li>
-            <div className="divider"></div>
             <li>
-              <div className="flex flex-row space-x-2">
-                <button className=" rounded-none"> My Dashboard </button>
-              </div>
+              <button
+                onClick={() => {
+                  router.push("/courseCaat");
+                }}
+                className=" w-full"
+              >
+                {" "}
+                Pricing
+              </button>
             </li>
           </ul>
         </div>
+      </div>
+      <div>
+        <a
+          href="/settings"
+          className="btn btn-ghost m-10 outline outline-5 bg-opacity-50 bg-base-100 hover:bg-opacity-100 hover:bg-base-100 hover:text-white shadow-lg shadow-persian_blue-500"
+        >
+          Account Settings
+        </a>
       </div>
     </div>
   );

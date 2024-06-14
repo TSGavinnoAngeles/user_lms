@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 const Read = () => {
   const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
-  const [confirmation, setConfirmation] = useState<string>("");
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -33,31 +32,40 @@ const Read = () => {
       {courses.length === 0 ? (
         <></>
       ) : (
-        <div className="flex flex-row gap-1">
+        <div className="flex flex-wrap gap-10">
           {courses.map((course) =>
             course.status === "Published" ? (
               <React.Fragment key={course._id}>
                 <div
                   key={course._id}
-                  className="card card-compact bg-neutral-200 shadow-xl outline outline-1 hover:outline-2 rounded-sm h-[300px] w-[113px] rotate-3"
+                  className="bg-citypop-300 card shadow-[10px_5px_0_0_#000] outline outline-1 hover:outline-2 rounded-md h-1/5 w-1/4"
+                  onClick={() =>
+                    (
+                      document?.getElementById(
+                        `course_preview_${course._id}`
+                      ) as HTMLDialogElement
+                    )?.showModal()
+                  }
                 >
+                  <div className="border-b-2 bg-citypop-200 h-5 flex flex-row-reverse ">
+                    <button className="border-2 bg-citypop-500 w-7 m-0.5 rounded-full  ">
+                      {" "}
+                    </button>
+                    <button className="border-2 bg-citypop-400 w-7 m-0.5 rounded-full  ">
+                      {" "}
+                    </button>
+                  </div>
+                  <figure className="outline outline-1 m-2 rounded-sm">
+                    <img src="/Wallpapers/blueCitypop.png" alt="Shoes" />
+                  </figure>
                   <div className="card-body ">
                     {course.status === "Published" ? (
                       <>
                         {" "}
-                        <div
-                          className="flex flex-col justify-between  "
-                          onClick={() =>
-                            (
-                              document?.getElementById(
-                                `course_preview_${course._id}`
-                              ) as HTMLDialogElement
-                            )?.showModal()
-                          }
-                        >
-                          <div className="divider"></div>
-                          <h2 className="card-title">{course.name}</h2>
-                          <div className="divider"></div>
+                        <div className="flex flex-col justify-between  ">
+                          <h2 className="card-content font-semibold -m-5 flex flex-col gap-2">
+                            {course.name}
+                          </h2>
                         </div>
                         <dialog
                           id={`course_preview_${course._id}`}
@@ -65,9 +73,8 @@ const Read = () => {
                         >
                           <div className="modal-box">
                             <h3 className="font-bold text-lg">
-                              Welcome to {course.name}
+                              Would you like to continue {course.name}?
                             </h3>
-                            <p>Created by: {course.publisher}</p>
                             <p className="py-4">{course.description}</p>
                             <div className="modal-action">
                               {/* <button className="btn">Enroll Now!</button> */}
@@ -97,7 +104,7 @@ const Read = () => {
                 </div>
               </React.Fragment>
             ) : (
-              <React.Fragment key={course._id}></React.Fragment>
+              <React.Fragment key={course._id}>Huh</React.Fragment>
             )
           )}
         </div>

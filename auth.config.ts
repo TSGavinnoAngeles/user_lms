@@ -5,7 +5,7 @@ import Google from "next-auth/providers/google";
 import { LoginSchema } from "./app/schema";
 import { connectToDB } from "./app/lib/db";
 import bcrypt from "bcryptjs";
-import User from "./app/models/user";
+import User from "./models/user";
 
 export default {
   providers: [

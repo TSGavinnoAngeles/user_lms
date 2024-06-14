@@ -4,7 +4,8 @@ import { enrollStudentSchema } from "@/app/schema";
 import * as z from "zod";
 import React, { useTransition, useEffect } from "react";
 import { enrollStudent } from "@/actions/enroll";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface EnrollmentModalProps {
   courseId: string;
@@ -17,6 +18,7 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
   name,
   setIsModalOpen,
 }) => {
+  const router = useRouter();
   const handleClose = () => {
     // Your existing code...
     setIsModalOpen(false);
@@ -46,6 +48,7 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
             console.log(data.error);
             throw new Error(data.error as string);
           }
+          window.location.reload();
           return data?.message;
         }),
 
@@ -59,7 +62,6 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
   };
   return (
     <div className="modal-box">
-      <Toaster />
       <h3 className="font-bold text-lg">Confirming Enrollment for {name} </h3>
       <p className="py-4">
         Before we get started with your course we just want to confirm that you
@@ -82,7 +84,7 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
           value={name}
           className="w-[40%]"
         />
-        <button type="submit" className="btn">
+        <button onClick={handleClose} type="submit" className="btn">
           Sign me up!
         </button>
       </form>

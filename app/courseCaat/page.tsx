@@ -1,28 +1,31 @@
-import { auth, signOut } from "@/auth";
-
 import React from "react";
-import Navbar from "../components/Dashboard/Navbar";
-import Side from "../components/CourseCaatComps/Side";
+import Side from "../components/Dashboard/Side";
 import Course_Cat from "../components/CourseCaatComps/Course_Cat";
+import TimeHeader from "../components/TimeHeader";
+
+import Header from "../components/CourseCaatComps/Header";
 const courseCaat = async () => {
-  const session = await auth();
-
-  const firstName = session?.user?.name?.split(" ")[0];
-
   return (
     <>
-      <Navbar />
-      <div className="flex">
-        <Side />
-        <div className="shadow-lg p-8 rounded-lg bg-zinc-300/10 flex flex-col gap-2 my-6 place-item-center ml-64">
-          <div>
-            <span className="font-bold"> Welcome Back, {firstName}!</span>
+      <div className="min-h-screen">
+        {" "}
+        <div className="flex flex-col ">
+          <TimeHeader />
+          <div className="flex flex-row ml-5">
+            <Side />
+
+            <div className="mx-5 w-screen">
+              <div className="flex flex-row ">
+                <Header />
+              </div>
+
+              <div className="  flex flex-col gap-2 my-6">
+                <p className="font-bold text-xl"> </p>
+                <Course_Cat />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      Your Current Courses:
-      <div className="shadow-inner  shadow-persian_blue-100 rounded-lg bg-zinc-300/10 place-item-center ml-64">
-        <Course_Cat />
       </div>
     </>
   );

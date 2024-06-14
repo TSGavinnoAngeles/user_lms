@@ -1,11 +1,32 @@
 "use server";
 import { connectToDB } from "@/app/lib/db";
-import Enrollment from "@/app/models/enrollments";
+import Enrollment from "@/models/enrollments";
 import { auth } from "@/auth";
-import Course from "@/app/models/courses";
+import Course from "@/models/courses";
 import { enrollStudentSchema } from "@/app/schema";
 import * as z from "zod";
-import User from "@/app/models/user";
+import User from "@/models/user";
+import { Publisher } from "./courses";
+
+export interface Enrollment {
+  _id: string;
+  student: string;
+  course: Course;
+  status: string;
+}
+
+export interface Course {
+  _id: string;
+  name: string;
+  courseId: string;
+  description: string;
+  publisher: Publisher;
+  createdAt: Date;
+  updatedAt: Date;
+  status: string;
+  sub_Mode: string;
+  price: number;
+}
 
 export const enrollStudent = async (
   values: z.infer<typeof enrollStudentSchema>
@@ -47,10 +68,10 @@ export const enrollStudent = async (
     });
     await enrollment.save();
 
-    const populatedEnrollment = await Enrollment.findById(enrollment._id)
-      .populate("student")
-      .populate("course");
-    console.log(populatedEnrollment);
+    // const populatedEnrollment = await Enrollment.findById(enrollment._id)
+    //   .populate("student")
+    //   .populate("course");
+    // console.log(populatedEnrollment);
     return { message: "Enrolled Successfully" };
   } catch (error) {
     return { error: error };
@@ -71,6 +92,47 @@ export const get_Enrollments = async (courseId: string) => {
       student: student._id,
     });
     return !!enrollment;
+  } catch (error) {
+    return { error: error };
+  }
+};
+
+export const getEnrollmentStudent = async () => {
+  const session = await auth();
+  try {
+    await connectToDB();
+    const student = await User.findOne({
+      name: session?.user?.name,
+      email: session?.user?.email,
+    });
+    const enrollment = await Enrollment.find({
+      student: student._id,
+    }).populate("course");
+
+    const data = JSON.parse(JSON.stringify(enrollment));
+    return data;
+  } catch (error) {
+    return { error: error };
+  }
+};
+
+export const unenrollStudent = async (courseId: string) => {
+  try {
+    const session = await auth();
+    await connectToDB();
+    const student = await User.findOne({
+      name: session?.user?.name,
+      email: session?.user?.email,
+    });
+
+    const courseData = await Course.findOne({ courseId: courseId });
+
+    const enrollment = await Enrollment.findOneAndDelete({
+      course: courseData._id,
+      student: student._id,
+    });
+
+    return { message: "Unenrolled Successfully" };
   } catch (error) {
     return { error: error };
   }
