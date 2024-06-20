@@ -79,7 +79,7 @@ export const RegiForm = () => {
                   {...form.register("email")}
                   disabled={isPending}
                   type="text"
-                  placeholder="E-mail Address or Username"
+                  placeholder="E-mail Address"
                   className="w-full p-2 my-2  shadow-lg outline outline-1 border-r-2 border-b-2 border-t-2 border-l-2 border-l-neutral-50 border-t-neutral-50 hover:bg-neutral-300"
                 />
                 <div className="flex flex-row space-x-4">

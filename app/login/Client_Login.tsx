@@ -142,7 +142,7 @@ export const LoginForm = () => {
             </div>
           </div>
           <div className="font-bold text-center hover: font-underlined ">
-            Already have an account?{" "}
+            Don't have an account yet?{" "}
             <a className="font-light hover:text-zaffre-200" href="/register">
               Register here
             </a>

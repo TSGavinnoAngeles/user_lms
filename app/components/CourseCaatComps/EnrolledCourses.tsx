@@ -16,11 +16,17 @@ const Read = () => {
     };
     fetchCourses();
   }, []);
+
   console.log(courses);
   return (
     <>
       {courses.length === 0 ? (
-        <></>
+        <button
+          onClick={() => router.push("/courseCaat")}
+          className="rounded-2xl border-2 border-dashed border-black bg-white px-6 py-3 font-semibold uppercase text-black transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none"
+        >
+          Enroll In A Course
+        </button>
       ) : (
         <div className="flex flex-row gap-10 ">
           {courses.map((course) =>
@@ -28,13 +34,9 @@ const Read = () => {
               <React.Fragment key={course._id}>
                 <div
                   key={course._id}
-                  className="bg-citypop-300 card shadow-[10px_5px_0_0_#000] outline outline-1 hover:outline-2 rounded-md h-1/5 w-1/4"
+                  className="card bg-citypop-500 transition-all shadow-[3px_3px_0px_black] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] outline outline-1 rounded-md h-1/5 w-1/4"
                   onClick={() =>
-                    (
-                      document?.getElementById(
-                        `course_preview_${course._id}`
-                      ) as HTMLDialogElement
-                    )?.showModal()
+                    router.push(`/course/${course.course.courseId}`)
                   }
                 >
                   <div className="border-b-2 bg-citypop-200 h-5 flex flex-row-reverse ">
@@ -62,35 +64,6 @@ const Read = () => {
                             ></progress>
                           </h2>
                         </div>
-                        <dialog
-                          id={`course_preview_${course._id}`}
-                          className="modal"
-                        >
-                          <div className="modal-box">
-                            <h3 className="font-bold text-lg">
-                              Would you like to continue {course.course.name}?
-                            </h3>
-                            <p className="py-4">{course.course.description}</p>
-                            <div className="modal-action">
-                              {/* <button className="btn">Enroll Now!</button> */}
-                              <button
-                                className="btn"
-                                onClick={() => {
-                                  router.push(
-                                    `/course/${course.course.courseId}`
-                                  );
-                                }}
-                              >
-                                {" "}
-                                See More
-                              </button>
-                              <form method="dialog">
-                                {/* if there is a button in form, it will close the modal */}
-                                <button className="btn">Close</button>
-                              </form>
-                            </div>
-                          </div>
-                        </dialog>
                       </>
                     ) : (
                       <div className="flex flex-row space-x-2 ">

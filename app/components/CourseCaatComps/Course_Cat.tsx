@@ -32,20 +32,16 @@ const Read = () => {
       {courses.length === 0 ? (
         <></>
       ) : (
-        <div className="flex flex-wrap gap-10">
+        <div className="flex flex-wrap gap-5">
           {courses.map((course) =>
             course.status === "Published" ? (
               <React.Fragment key={course._id}>
                 <div
                   key={course._id}
-                  className="bg-citypop-300 card shadow-[10px_5px_0_0_#000] outline outline-1 hover:outline-2 rounded-md h-1/5 w-1/4"
-                  onClick={() =>
-                    (
-                      document?.getElementById(
-                        `course_preview_${course._id}`
-                      ) as HTMLDialogElement
-                    )?.showModal()
-                  }
+                  className="card bg-citypop-500 transition-all shadow-[5px_5px_0px_black] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] outline outline-1 rounded-md h-1/5 w-1/4"
+                  onClick={() => {
+                    router.push(`/course/${course.courseId}`);
+                  }}
                 >
                   <div className="border-b-2 bg-citypop-200 h-5 flex flex-row-reverse ">
                     <button className="border-2 bg-citypop-500 w-7 m-0.5 rounded-full  ">
@@ -104,7 +100,7 @@ const Read = () => {
                 </div>
               </React.Fragment>
             ) : (
-              <React.Fragment key={course._id}>Huh</React.Fragment>
+              <React.Fragment key={course._id}></React.Fragment>
             )
           )}
         </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { auth, signOut } from "@/auth";
-import { delStudent } from "@/actions/student";
 import Delete from "../components/Settings Page/Delete";
+import { DEFAULT_SIGNOUT_REDIRECT } from "@/routes";
 
 const SettingsPage = async () => {
   const session = await auth();
@@ -19,7 +19,7 @@ const SettingsPage = async () => {
             <form
               action={async () => {
                 "use server";
-                await signOut();
+                await signOut({ redirectTo: DEFAULT_SIGNOUT_REDIRECT });
               }}
             >
               <div className="justify-between">

@@ -4,13 +4,13 @@ import React, { useEffect, useState } from "react";
 import { get_One_Course } from "@/actions/courses";
 import { Course } from "@/actions/courses";
 import Navbar from "@/app/components/Dashboard/Navbar";
-import EnrollmentModal from "@/app/components/CourseCaatComps/EnrollmentModal";
+import EnrollmentModal from "@/app/components/Modals/EnrollmentModal";
 import { get_Enrollments } from "@/actions/enroll";
 
 const Editor = ({ params }: { params: { courseId: string } }) => {
   const [courses, setCourses] = useState<Course>();
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (courses) {
@@ -35,7 +35,7 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
 
     fetchCourses();
     isStudentEnrolled();
-  }, [params.courseId, isModalOpen]);
+  }, [params.courseId, isOpen]);
 
   return courses?.status === "Published" ? (
     <div>
@@ -178,9 +178,10 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
       </div>
       <dialog id="open_modal_enrollment" className="modal">
         <EnrollmentModal
+          isOpen={isOpen}
           courseId={params.courseId}
           name={courses?.name || "--"}
-          setIsModalOpen={setIsModalOpen}
+          setIsOpen={setIsOpen}
         />
       </dialog>
     </div>

@@ -4,29 +4,32 @@ import React, { useEffect, useState } from "react";
 import { get_One_Course } from "@/actions/courses";
 import { Course } from "@/actions/courses";
 import Navbar from "@/app/components/Dashboard/Navbar";
-import EnrollmentModal from "@/app/components/CourseCaatComps/EnrollmentModal";
-import UnenrollmentModal from "@/app/components/CourseCaatComps/UnenrollmentModal";
+import EnrollmentModal from "@/app/components/Modals/EnrollmentModal";
+import UnenrollmentModal from "@/app/components/Modals/UnenrollmentModal";
 import { get_Enrollments } from "@/actions/enroll";
 import { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
+import SpringModal from "@/app/components/Modals/DelModal";
+
 const Editor = ({ params }: { params: { courseId: string } }) => {
   const router = useRouter();
   const [courses, setCourses] = useState<Course>();
   const [isEnrolled, setIsEnrolled] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Added loading state
 
   useEffect(() => {
-    if (courses) {
-      return;
-    }
     const fetchCourses = async () => {
       const result = await get_One_Course(params.courseId);
       if (result.error) {
         console.error(result.error);
       } else {
         setCourses(result);
+        setIsLoading(false); // Update loading state when data is fetched
       }
     };
+
     const isStudentEnrolled = async () => {
       const enrollments = await get_Enrollments(params.courseId);
       if (enrollments) {
@@ -38,22 +41,25 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
 
     fetchCourses();
     isStudentEnrolled();
-  }, [params.courseId, isModalOpen]);
+  }, [params.courseId, isOpen]);
 
-  return courses?.status === "Published" ? (
+  useEffect(() => {
+    if (!isLoading && courses?.status !== "Published") {
+      redirect(`/course/${params?.courseId}/error`);
+    }
+  }, [isLoading, courses]);
+
+  return (
     <div>
-      <Toaster />
       <Navbar />
       <div
         className="hero min-h-[700px] z-0 outline outline-1"
         style={{
           backgroundImage: "url('/Wallpapers/blueCitypop.png')",
-          // backgroundRepeat: "repeat",
-          // backgroundSize: "cover",
         }}
       >
         <div className="hero-content flex-col lg:flex-row-reverse  ">
-          <div className="card w-100 bg-citypop-200 outline outline-2 bg-opacity-95   shadow-[10px_10px_0_0_]">
+          <div className="card w-100 bg-citypop-200 outline outline-2 bg-opacity-95  shadow-[10px_10px_0_0_]">
             <div className="border-b-2 bg-citypop-300 h-6 flex flex-row-reverse  ">
               <button className="border-2 bg-citypop-400 w-7 m-2 rounded-full  ">
                 {" "}
@@ -62,10 +68,12 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
                 {" "}
               </button>
             </div>
-            <div className="card-body">
-              <h2 className="card-title text-5xl">
-                Welcome to {courses?.name}
-              </h2>
+            <div className="card-body min-w-full">
+              <h2 className="card-title text-5xl">{courses?.name}</h2>
+              <h1 className="card-title text-5xl">
+                {" "}
+                Course Id: {courses?.courseId}
+              </h1>
               <h2 className="card-title text-2xl">
                 Publihed by: {courses?.publisher.name}
               </h2>
@@ -74,42 +82,36 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
               <div>
                 {isEnrolled ? (
                   <div className="space-x-24">
-                    <button
-                      disabled={true}
-                      className="btn bg-mikado_yellow-500 outline outline-2 "
-                    >
-                      <a className="text-rich_black-100">
-                        {" "}
-                        {`You're already enrolled in ${courses?.name}`}
-                      </a>
-                    </button>
-                    <button
-                      onClick={() =>
-                        (
-                          document?.getElementById(
-                            `open_unenroll_modal`
-                          ) as HTMLDialogElement
-                        )?.showModal()
-                      }
-                      className="btn bg-bittersweet_shimmer outline outline-2 "
-                    >
-                      {" "}
-                      Would You like to unenroll?
-                    </button>
+                    <div className="py-1 rounded-sm outline outline-2  bg-bittersweet_shimmer grid place-content-center ">
+                      <button
+                        onClick={() => setIsOpen(true)}
+                        className=" text-white font-medium px-4 py-2 rounded hover:opacity-90 transition-opacity"
+                      >
+                        Would You like to unenroll?
+                      </button>
+                      <UnenrollmentModal
+                        courseId={params.courseId}
+                        name={courses?.name || "--"}
+                        isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                      />
+                    </div>
                   </div>
                 ) : (
-                  <button
-                    onClick={() =>
-                      (
-                        document?.getElementById(
-                          `open_modal_enrollment`
-                        ) as HTMLDialogElement
-                      )?.showModal()
-                    }
-                    className="btn bg-mikado_yellow-500 outline outline-2"
-                  >
-                    Enroll in {courses?.name} Now!
-                  </button>
+                  <div className="py-1 rounded-sm outline outline-2 bg-mikado_yellow-600 grid place-content-center ">
+                    <button
+                      onClick={() => setIsOpen(true)}
+                      className=" text-white font-medium px-4 py-2 rounded hover:opacity-90 transition-opacity"
+                    >
+                      Enroll Into {courses?.name}
+                    </button>
+                    <EnrollmentModal
+                      courseId={params.courseId}
+                      name={courses?.name || "--"}
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -199,48 +201,6 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
               Vivamus ac vulputate nisl, vel maximus turpis. Curabitur blandit
               nulla nec dolor vehicula eleifend.
             </p>
-          </div>
-        </div>
-      </div>
-      <dialog id="open_modal_enrollment" className="modal">
-        <EnrollmentModal
-          courseId={params.courseId}
-          name={courses?.name || "--"}
-          setIsModalOpen={setIsModalOpen}
-        />
-      </dialog>
-
-      <dialog id="open_unenroll_modal" className="modal">
-        <UnenrollmentModal
-          courseId={params.courseId}
-          name={courses?.name || "--"}
-          setIsModalOpen={setIsModalOpen}
-        />
-      </dialog>
-    </div>
-  ) : (
-    <div>
-      <Navbar />
-      <div
-        className="hero min-h-[653px] z-0 outline outline-1"
-        style={{
-          backgroundImage:
-            "url('https://images.pexels.com/photos/327482/pexels-photo-327482.jpeg')",
-          // backgroundRepeat: "repeat",
-          // backgroundSize: "cover",
-        }}
-      >
-        <div className="hero-content flex-col lg:flex-row-reverse ">
-          <Toaster />
-          <div className="card w-100 bg-nyanza-900">
-            <div className="card-body">
-              <h2 className="card-title text-5xl">
-                WHOOPS THIS COURSE IS YET TO BE PUBLISHED
-              </h2>
-              <h2 className="card-title text-2xl">
-                Take note of the ID! It might be available sometime soon
-              </h2>
-            </div>
           </div>
         </div>
       </div>

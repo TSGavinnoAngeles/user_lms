@@ -43,7 +43,7 @@ export const enrollStudent = async (
     const { courseName } = validatedForm.data;
     console.log("courseName", courseName);
     const courseData = await Course.findOne({ name: courseName });
-    console.log(courseData._id);
+    console.log(courseData);
 
     const student = await User.findOne({
       name: session?.user?.name,
@@ -54,7 +54,7 @@ export const enrollStudent = async (
     const existingEnrollment = await Enrollment.findOne({
       student: student._id,
       course: courseData._id,
-    }).lean();
+    });
 
     console.log("yes", existingEnrollment);
     if (existingEnrollment) {
@@ -66,12 +66,9 @@ export const enrollStudent = async (
       course: courseData._id,
       status: "ONGOING",
     });
+
     await enrollment.save();
 
-    // const populatedEnrollment = await Enrollment.findById(enrollment._id)
-    //   .populate("student")
-    //   .populate("course");
-    // console.log(populatedEnrollment);
     return { message: "Enrolled Successfully" };
   } catch (error) {
     return { error: error };
@@ -105,6 +102,7 @@ export const getEnrollmentStudent = async () => {
       name: session?.user?.name,
       email: session?.user?.email,
     });
+
     const enrollment = await Enrollment.find({
       student: student._id,
     }).populate("course");
@@ -120,6 +118,7 @@ export const unenrollStudent = async (courseId: string) => {
   try {
     const session = await auth();
     await connectToDB();
+
     const student = await User.findOne({
       name: session?.user?.name,
       email: session?.user?.email,
