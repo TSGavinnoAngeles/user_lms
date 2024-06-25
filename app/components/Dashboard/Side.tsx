@@ -11,7 +11,7 @@ const Side = () => {
       <div className="">
         <div className="flex flex-col">
           <a className="btn btn-ghost">
-            <Image
+            <img
               alt="Cold Turkey"
               onClick={() => router.push("/dashboard")}
               src="/Logo/logo2.png "

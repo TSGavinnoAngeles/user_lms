@@ -20,21 +20,25 @@ export default function Home() {
         </div>
         <div className="flex flex-row carousel carousel-center space-x-12 mx-12 mb-12">
           <Testimonials
+            imgsrc="/poc_!.png"
             name="Sarah Diwali Johnson"
             jobTitle="Freelance UIUX Designer  "
             courseRef="/login"
           />
           <Testimonials
+            imgsrc="/cust_2.png"
             name="Geoff Ramsey"
             jobTitle="Part-time streamer to Software Engineer "
             courseRef="/login"
           />
           <Testimonials
+            imgsrc="/cust_3.png"
             name="Patrick Jhonson Sweeny "
             jobTitle="Coroporate Lawyer to Full Stack Developer"
             courseRef="/login"
           />
           <Testimonials
+            imgsrc="/cust_1.png"
             name="Kareena Smith-Enrile "
             jobTitle="Business Owner turned QA at Wacdorals Co."
             courseRef="/login"
