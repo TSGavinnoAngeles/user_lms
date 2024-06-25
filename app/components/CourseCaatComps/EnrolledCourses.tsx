@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 import { Enrollment, getEnrollmentStudent } from "@/actions/enroll";
+import Image from "next/image";
 
 const Read = () => {
   const router = useRouter();
@@ -48,7 +49,7 @@ const Read = () => {
                     </button>
                   </div>
                   <figure className="outline outline-1 m-2 rounded-sm">
-                    <img src="/Wallpapers/blueCitypop.png" alt="Shoes" />
+                    <Image src="/Wallpapers/blueCitypop.png" alt="Shoes" />
                   </figure>
                   <div className="card-body ">
                     {course.course.status === "Published" ? (

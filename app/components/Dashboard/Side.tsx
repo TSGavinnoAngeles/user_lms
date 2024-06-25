@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Side = () => {
   const router = useRouter();
@@ -10,7 +11,8 @@ const Side = () => {
       <div className="">
         <div className="flex flex-col">
           <a className="btn btn-ghost">
-            <img
+            <Image
+              alt="Cold Turkey"
               onClick={() => router.push("/dashboard")}
               src="/Logo/logo2.png "
               className="w-auto h-[125%]"
