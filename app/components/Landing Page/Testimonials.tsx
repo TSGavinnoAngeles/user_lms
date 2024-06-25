@@ -19,8 +19,6 @@ const Testimonials: React.FC<TestimonialsProps> = ({
       <a href={courseRef}>
         <figure className="px-7 pt-3">
           <img
-            width={0}
-            height={0}
             alt="Testimonial Image"
             src={imgsrc}
             className="rounded-xl border-4 border-blk  hover:border-zaffre-300 hover:text-zaffre-300"
