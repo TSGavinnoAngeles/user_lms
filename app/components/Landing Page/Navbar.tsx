@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 
 const Navbar = () => {
   return (
@@ -46,7 +47,11 @@ const Navbar = () => {
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">
-          <img src="/Logo/logo2.png" className="w-[125%]  h-[125%] z=50" />
+          <Image
+            alt="logo"
+            src="/Logo/logo2.png"
+            className="w-[125%]  h-[125%] z=50"
+          />
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">

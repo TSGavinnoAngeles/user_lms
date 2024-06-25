@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter, redirect } from "next/navigation";
+import Image from "next/image";
 
 const Navbar = () => {
   const router = useRouter();
@@ -56,10 +57,11 @@ const Navbar = () => {
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">
-          <img
+          <Image
             onClick={() => router.push("/dashboard")}
             src="/Logo/logo2White.png"
             className="w-[125%]  h-[125%]"
+            alt={""}
           />
         </a>
       </div>

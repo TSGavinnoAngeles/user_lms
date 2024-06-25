@@ -1,6 +1,8 @@
 import React from "react";
 import ShowDate from "./ShowDate";
 import { auth } from "@/auth";
+import Image from "next/image"; // Import the Image component from the correct package
+
 const NameHeader = async () => {
   const session = await auth();
   const firstName = session?.user?.name?.split(" ")[0];
@@ -9,16 +11,19 @@ const NameHeader = async () => {
       <div className="flex flex-row justify-between ">
         <div>
           <a>
-            <img
+            <Image
+              alt="Cold Turkey"
               src="/Wallpapers/coldTurkey.png"
               className="h-[100%] w-auto absolute right-0 top-0"
+              width={100} // Add the necessary props to the Image component
+              height={100} // Add the necessary props to the Image component
             />
           </a>
         </div>
       </div>
       <div className="card-title p-3 flex-row place-item-center">
         {" "}
-        <p> Hello {firstName}! I hope you're having a wonderful day </p>
+        <p> Hello {firstName}! I hope you are having a wonderful day </p>
       </div>
     </div>
   );

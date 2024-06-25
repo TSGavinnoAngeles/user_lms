@@ -5,7 +5,7 @@ import { get_Enrollments } from "@/actions/enroll";
 import Navbar from "@/app/components/Dashboard/Navbar";
 import { redirect } from "next/navigation";
 
-const page = ({ params }: { params: { courseId: string; order: number } }) => {
+const Page = ({ params }: { params: { courseId: string; order: number } }) => {
   const [courses, setCourses] = useState<Course>();
   const [isEnrolled, setIsEnrolled] = useState(false);
 
@@ -67,4 +67,4 @@ const page = ({ params }: { params: { courseId: string; order: number } }) => {
   );
 };
 
-export default page;
+export default Page;
