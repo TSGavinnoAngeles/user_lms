@@ -5,6 +5,14 @@ import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 
+export interface InterfaceUser {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+}
+
 export const Login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedForm = LoginSchema.safeParse(values);
 
