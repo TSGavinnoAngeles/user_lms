@@ -18,7 +18,7 @@ export default {
           console.log(JSON.stringify(body));
 
           try {
-            const res = await fetch(`${process.env.WEB_URl}/api/login`, {
+            const res = await fetch(`user-lms.vercel.app/api/login`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
