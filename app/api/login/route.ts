@@ -16,13 +16,12 @@ export async function POST(req: Request) {
     const user = await User.findOne({ email });
     console.log(user);
     if (!user) {
-      return NextResponse.json("No User", { status: 400 });
+      return NextResponse.json("Invalid", { status: 400 });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      console.log("Password Does not match");
-      return NextResponse.json("No Password", { status: 400 });
+      return NextResponse.json("Invalid", { status: 400 });
     }
 
     return NextResponse.json(user, { status: 200 });

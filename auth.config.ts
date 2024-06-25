@@ -28,7 +28,6 @@ export default {
 
             if (res.ok) {
               const json = (await res.json()) as InterfaceUser;
-              console.log("we back", json);
               return json;
             }
             if (!res.ok) {
