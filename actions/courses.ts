@@ -120,6 +120,20 @@ export const getCourses = async (): Promise<Course[]> => {
   }
 };
 
+export const getPublishedCourses = async (): Promise<Course[]> => {
+  await connectToDB();
+
+  try {
+    const courses = await Course.find({ status: "Published" });
+    console.log(courses);
+    const data = JSON.parse(JSON.stringify(courses));
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const updateCourse = async (
   values: z.infer<typeof UpdateCourseSchema>
 ) => {

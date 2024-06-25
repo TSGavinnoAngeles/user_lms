@@ -6,7 +6,7 @@ const Side = () => {
   const router = useRouter();
 
   return (
-    <div className="w-auto h-2/3 rounded-xl flex flex-col justify-between outline outline-2 ">
+    <div className="w-1/6 h-2/3 rounded-xl flex flex-col justify-between">
       <div className="">
         <div className="flex flex-col">
           <a className="btn btn-ghost">
@@ -22,7 +22,7 @@ const Side = () => {
             <li>
               <button
                 onClick={() => {
-                  router.push("/courseCaat");
+                  router.push("/catalog");
                 }}
                 className=" w-full"
               >
@@ -33,7 +33,7 @@ const Side = () => {
             <li>
               <button
                 onClick={() => {
-                  router.push("/courseCaat");
+                  router.push("/catalog");
                 }}
                 className=" w-full"
               >

@@ -11,7 +11,7 @@ const NameHeader = async () => {
           <a>
             <img
               src="/Wallpapers/coldTurkey.png"
-              className="h-[100%] w-auto absolute right-10 top-0"
+              className="h-[100%] w-auto absolute right-0 top-0"
             />
           </a>
         </div>

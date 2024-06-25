@@ -22,19 +22,19 @@ const Read = () => {
     <>
       {courses.length === 0 ? (
         <button
-          onClick={() => router.push("/courseCaat")}
+          onClick={() => router.push("/catalog")}
           className="rounded-2xl border-2 border-dashed border-black bg-white px-6 py-3 font-semibold uppercase text-black transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_black] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none"
         >
           Enroll In A Course
         </button>
       ) : (
-        <div className="flex flex-row gap-10 ">
+        <div className="flex flex-row gap-5 ">
           {courses.map((course) =>
             course.course.status === "Published" ? (
               <React.Fragment key={course._id}>
                 <div
                   key={course._id}
-                  className="card bg-citypop-500 transition-all shadow-[3px_3px_0px_black] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] outline outline-1 rounded-md h-1/5 w-1/4"
+                  className="card bg-citypop-500 transition-all hover:shadow-[10px_10px_0px_black] hover:translate-x-[-3px] hover:translate-y-[-3px] outline outline-1 rounded-md h-auto w-1/4"
                   onClick={() =>
                     router.push(`/course/${course.course.courseId}`)
                   }
