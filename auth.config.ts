@@ -3,9 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
 import { LoginSchema } from "./app/schema";
-import { connectToDB } from "./app/lib/db";
-import bcrypt from "bcryptjs";
-import User from "./models/user";
+import { InterfaceUser } from "./actions/login";
 
 export default {
   providers: [
@@ -15,28 +13,30 @@ export default {
 
         if (ValidatedFields.success) {
           const { email, password } = ValidatedFields.data;
-          await connectToDB();
+
+          const body = { email: email, password: password };
+          console.log(JSON.stringify(body));
+
           try {
-            const user = await User.findOne({ email });
+            const res = await fetch(`${process.env.WEB_URl}/api/login`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            });
 
-            const passwordMatch = await bcrypt.compare(password, user.password);
-            if (!user) {
-              // return { error: "User not found" };
-              console.log("User not found");
-              return null; // Add a return statement here to exit the function if user is null
+            if (res.ok) {
+              const json = (await res.json()) as InterfaceUser;
+              console.log("we back", json);
+              return json;
             }
-
-            if (!passwordMatch) {
-              // return { error: "Invalid password" };
-              console.log("Invalid password");
+            if (!res.ok) {
               return null;
-            } else {
-              console.log("Logged in successfully", user);
-
-              return user;
             }
-          } catch (err) {
-            console.error("Error in Login: " + err);
+          } catch (error) {
+            console.log("CONFIG ERROR: ", error);
+            return null;
           }
         }
         return null;
