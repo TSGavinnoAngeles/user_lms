@@ -34,29 +34,25 @@ export const enrollStudent = async (
   const session = await auth();
   const validatedForm = enrollStudentSchema.safeParse(values);
   if (!validatedForm.success) {
-    console.log("Meh");
     return { error: "Invalidated Fields!" };
   }
 
   await connectToDB();
   try {
     const { courseName } = validatedForm.data;
-    console.log("courseName", courseName);
+
     const courseData = await Course.findOne({ name: courseName });
-    console.log(courseData._id);
 
     const student = await User.findOne({
       name: session?.user?.name,
       email: session?.user?.email,
     });
-    console.log(student);
 
     const existingEnrollment = await Enrollment.findOne({
       student: student._id,
       course: courseData._id,
-    }).lean();
+    });
 
-    console.log("yes", existingEnrollment);
     if (existingEnrollment) {
       return { error: "You are already enrolled in this course!" };
     }
@@ -66,12 +62,9 @@ export const enrollStudent = async (
       course: courseData._id,
       status: "ONGOING",
     });
+
     await enrollment.save();
 
-    // const populatedEnrollment = await Enrollment.findById(enrollment._id)
-    //   .populate("student")
-    //   .populate("course");
-    // console.log(populatedEnrollment);
     return { message: "Enrolled Successfully" };
   } catch (error) {
     return { error: error };
@@ -105,6 +98,7 @@ export const getEnrollmentStudent = async () => {
       name: session?.user?.name,
       email: session?.user?.email,
     });
+
     const enrollment = await Enrollment.find({
       student: student._id,
     }).populate("course");
@@ -120,6 +114,7 @@ export const unenrollStudent = async (courseId: string) => {
   try {
     const session = await auth();
     await connectToDB();
+
     const student = await User.findOne({
       name: session?.user?.name,
       email: session?.user?.email,
@@ -133,6 +128,28 @@ export const unenrollStudent = async (courseId: string) => {
     });
 
     return { message: "Unenrolled Successfully" };
+  } catch (error) {
+    return { error: error };
+  }
+};
+
+export const getCoursesStudent = async () => {
+  const session = await auth();
+  try {
+    await connectToDB();
+    const student = await User.findOne({
+      name: session?.user?.name,
+      email: session?.user?.email,
+    });
+    const enrollment = await Enrollment.find({
+      student: student._id,
+    });
+
+    const courses = await Course.find({
+      _id: enrollment.map((enroll) => enroll.course),
+    });
+    const data = JSON.parse(JSON.stringify(courses));
+    return data;
   } catch (error) {
     return { error: error };
   }

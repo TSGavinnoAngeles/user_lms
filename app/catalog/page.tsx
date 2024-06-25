@@ -4,7 +4,7 @@ import Course_Cat from "../components/CourseCaatComps/Course_Cat";
 import TimeHeader from "../components/TimeHeader";
 
 import Header from "../components/CourseCaatComps/Header";
-const courseCaat = async () => {
+const courseCaat = () => {
   return (
     <>
       <div className="min-h-screen">
@@ -17,10 +17,9 @@ const courseCaat = async () => {
             <div className="mx-5 w-screen">
               <div className="flex flex-row ">
                 <Header />
-              </div>
-
+              </div>{" "}
+              <p className="font-bold text-3xl"> Explore the catalog </p>
               <div className="  flex flex-col gap-2 my-6">
-                <p className="font-bold text-xl"> </p>
                 <Course_Cat />
               </div>
             </div>

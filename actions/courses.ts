@@ -96,14 +96,9 @@ export const del_Course = async (id: string) => {
 export const get_One_Course = async (id: string) => {
   try {
     await connectToDB();
-    const courses = await Course.findOne({ courseId: id }).populate(
-      "publisher"
-    );
-
-    const popCourse = await Course.findById(courses._id);
-    console.log(popCourse);
-    const data = JSON.parse(JSON.stringify(popCourse));
-
+    const courses = await Course.findOne({ courseId: id });
+    console.log(courses);
+    const data = JSON.parse(JSON.stringify(courses));
     return data;
   } catch (error) {
     console.error(error);
@@ -116,6 +111,20 @@ export const getCourses = async (): Promise<Course[]> => {
 
   try {
     const courses = await Course.find({});
+    console.log(courses);
+    const data = JSON.parse(JSON.stringify(courses));
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getPublishedCourses = async (): Promise<Course[]> => {
+  await connectToDB();
+
+  try {
+    const courses = await Course.find({ status: "Published" });
     console.log(courses);
     const data = JSON.parse(JSON.stringify(courses));
     return data;

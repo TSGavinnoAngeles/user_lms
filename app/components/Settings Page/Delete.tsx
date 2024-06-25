@@ -1,23 +1,22 @@
 "use client";
 import React from "react";
-import { auth, signOut } from "@/auth";
-import { delStudent, searchStudent } from "@/actions/student";
+
+import { useState } from "react";
+import SpringModal from "../Modals/DelModal";
 
 const Delete = () => {
-  const handleDelete = async () => {
-    await delStudent();
-    window.location.reload();
-  };
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="justify-between">
-      <button
-        onClick={() => handleDelete()}
-        type="submit"
-        className="btn bg-bittersweet_shimmer text-uranian_blue-900 outline outline-2 "
-      >
-        {" "}
-        Delete my Profile
-      </button>
+      <div className="py-1 rounded-sm outline outline-2 bg-mikado_yellow-600 grid place-content-center ">
+        <button
+          onClick={() => setIsOpen(true)}
+          className=" text-white font-medium px-4 py-2 rounded hover:opacity-90 transition-opacity"
+        >
+          Delete Account
+        </button>
+        <SpringModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      </div>
     </div>
   );
 };

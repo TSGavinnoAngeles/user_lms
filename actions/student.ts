@@ -11,7 +11,7 @@ export const searchStudent = async () => {
     await connectToDB();
     const student = await User.find({ name: name });
     const data = JSON.parse(JSON.stringify(student));
-    console.log(data);
+
     return data;
   } catch (error) {
     console.error(error);
@@ -31,7 +31,6 @@ export const delStudent = async () => {
       return { error: "Admin cannot unenroll" };
     }
     const data = JSON.parse(JSON.stringify(student));
-    console.log(data);
 
     // Delete the enrollments associated with the student
     if (student) {
@@ -39,7 +38,7 @@ export const delStudent = async () => {
       await User.deleteOne({ _id: student._id });
       try {
         await signOut();
-        console.log("Student deleted successfully");
+
         return data;
       } catch (error) {
         console.log(error);

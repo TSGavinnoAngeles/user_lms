@@ -84,7 +84,7 @@ const Navbar = () => {
           href="/register"
           className="btn mx-5 outline outline-3 bg-citypop-600 text-neutral-100"
         >
-          Create an account today!
+          Create an account
         </a>
       </div>
     </div>
