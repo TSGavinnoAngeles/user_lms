@@ -49,7 +49,7 @@ const Read = () => {
                     </button>
                   </div>
                   <figure className="outline outline-1 m-2 rounded-sm">
-                    <Image src="/Wallpapers/blueCitypop.png" alt="Shoes" />
+                    <img src="/Wallpapers/blueCitypop.png" alt="Shoes" />
                   </figure>
                   <div className="card-body ">
                     {course.course.status === "Published" ? (

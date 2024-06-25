@@ -47,10 +47,12 @@ const Navbar = () => {
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">
-          <Image
+          <img
             alt="logo"
             src="/Logo/logo2.png"
             className="w-[125%]  h-[125%] z=50"
+            width={500}
+            height={200}
           />
         </a>
       </div>

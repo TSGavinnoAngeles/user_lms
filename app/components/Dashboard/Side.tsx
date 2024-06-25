@@ -16,6 +16,8 @@ const Side = () => {
               onClick={() => router.push("/dashboard")}
               src="/Logo/logo2.png "
               className="w-auto h-[125%]"
+              width={500}
+              height={200}
             />
           </a>
           <div className="divider"></div>

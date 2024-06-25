@@ -18,7 +18,9 @@ const Testimonials: React.FC<TestimonialsProps> = ({
     <div className="card w-[300px] mt-56 border-2 border-color-blk border-spacing-y-4 carousel-item  mx-1 max-h-[30%] max-w-[30%] hover:border-zaffre-300 bg-mikado_yellow-500 mb-3 hover:text-zaffre-300 my">
       <a href={courseRef}>
         <figure className="px-7 pt-3">
-          <Image
+          <img
+            width={0}
+            height={0}
             alt="Testimonial Image"
             src={imgsrc}
             className="rounded-xl border-4 border-blk  hover:border-zaffre-300 hover:text-zaffre-300"
