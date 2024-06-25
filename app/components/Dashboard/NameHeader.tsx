@@ -11,7 +11,7 @@ const NameHeader = async () => {
       <div className="flex flex-row justify-between ">
         <div>
           <a>
-            <Image
+            <img
               alt="Cold Turkey"
               src="/Wallpapers/coldTurkey.png"
               className="h-[100%] w-auto absolute right-0 top-0"

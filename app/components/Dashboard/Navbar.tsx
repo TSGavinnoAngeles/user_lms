@@ -57,7 +57,7 @@ const Navbar = () => {
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">
-          <Image
+          <img
             onClick={() => router.push("/dashboard")}
             src="/Logo/logo2White.png"
             className="w-[125%]  h-[125%]"
