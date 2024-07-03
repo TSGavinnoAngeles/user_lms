@@ -10,7 +10,6 @@ const SpringModal = ({
 }) => {
   const handleDelete = async () => {
     await delStudent();
-
     window.location.reload();
   };
 

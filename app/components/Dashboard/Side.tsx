@@ -37,7 +37,7 @@ const Side = () => {
             <li>
               <button
                 onClick={() => {
-                  router.push("/catalog");
+                  router.push("/pricing");
                 }}
                 className=" w-full"
               >

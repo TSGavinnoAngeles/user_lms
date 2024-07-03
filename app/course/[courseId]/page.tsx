@@ -8,40 +8,51 @@ import UnenrollmentModal from "@/app/components/Modals/UnenrollmentModal";
 import { get_Enrollments } from "@/actions/enroll";
 import { redirect } from "next/navigation";
 import Preview from "@/app/components/Course/Preview";
+import { getUserSub, Student } from "@/actions/student";
 
 const Editor = ({ params }: { params: { courseId: string } }) => {
   const [courses, setCourses] = useState<Course>();
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isStudent, setIsStudent] = useState<Student>();
+
+  const fetchCourses = async () => {
+    const result = await get_One_Course(params.courseId);
+    if (result.error) {
+      console.error(result.error);
+    } else {
+      setCourses(result);
+      setIsLoading(false);
+    }
+  };
+
+  const isStudentEnrolled = async () => {
+    const enrollments = await get_Enrollments(params.courseId);
+    if (enrollments) {
+      setIsEnrolled(true);
+    } else {
+      setIsEnrolled(false);
+    }
+  };
+  const tier = async () => {
+    const result = await getUserSub();
+    setIsStudent(result);
+    console.log(result);
+  };
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      const result = await get_One_Course(params.courseId);
-      if (result.error) {
-        console.error(result.error);
-      } else {
-        setCourses(result);
-        setIsLoading(false);
-      }
-    };
-
-    const isStudentEnrolled = async () => {
-      const enrollments = await get_Enrollments(params.courseId);
-      if (enrollments) {
-        setIsEnrolled(true);
-      } else {
-        setIsEnrolled(false);
-      }
-    };
-
     fetchCourses();
     isStudentEnrolled();
+    tier();
   }, [params.courseId, isOpen]);
 
   useEffect(() => {
     if (!isLoading && courses?.status !== "Published") {
       redirect(`/course/${params?.courseId}/error`);
+    }
+    if (isStudent?.tier === "free" && courses?.sub_Mode === "Paid") {
+      redirect(`/pricing`);
     }
   }, [isLoading, courses]);
 
