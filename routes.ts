@@ -1,4 +1,11 @@
-export const publicRoutes = ["/", "/api/login", "/api/webhook", "/api/stripe"];
+export const publicRoutes = [
+  "/",
+  "/api/login",
+  "/api/webhook",
+  "/api/stripe/Premium%20Member/checkout",
+  "/api/stripe/Admin%20Access/checkout",
+  "/api/stripe/Basic%20Member/checkout",
+];
 
 export const authRoutes = ["/login", "/register"];
 
