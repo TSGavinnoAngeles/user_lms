@@ -46,12 +46,13 @@ export const Register = async (values: z.infer<typeof RegisterSchema>) => {
       email: toLowerEmail,
       password: hashedPass,
       role: "user",
+      tier: "free",
     });
 
     return { message: "User registered." };
-  } catch (error) {
+  } catch (error: any) {
     if (error) {
-      return { error: "Registry Error" };
+      return { error: error.message };
     }
   }
 };

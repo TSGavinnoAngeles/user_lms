@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React from "react";
 import Navbar from "./components/Landing Page/Navbar";
 import IntroHero from "./components/Landing Page/IntroHero";
 import Testimonials from "./components/Landing Page/Testimonials";

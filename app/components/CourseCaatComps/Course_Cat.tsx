@@ -2,17 +2,20 @@
 import React, { useEffect, useState } from "react";
 import { getPublishedCourses } from "@/actions/courses";
 import { Course } from "@/actions/courses";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import LinesEllipsis from "react-lines-ellipsis";
 import { getCoursesStudent, getEnrollmentStudent } from "@/actions/enroll";
+import { getUserSub, Student } from "@/actions/student";
 
 const Read = () => {
   const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
   const [enrolled, isEnrolled] = useState<Course[]>([]);
+  const [student, isStudent] = useState<Student>();
 
   const fetchCourses = async () => {
     const result = await getPublishedCourses();
+
     setCourses(result);
   };
   const enrollment = async () => {
@@ -20,10 +23,36 @@ const Read = () => {
     isEnrolled(result);
   };
 
+  const tier = async () => {
+    const result = await getUserSub();
+    isStudent(result);
+    console.log(result);
+  };
+
   useEffect(() => {
     fetchCourses();
     enrollment();
+    tier();
   }, []);
+
+  const handleEnroll = (subMode: string, courseId: string) => {
+    console.log(subMode, courseId, student?.tier);
+    if (!student) {
+      // Handle case where student is undefined or null
+      router.push(`/login`); // Example redirect, adjust as necessary
+      return;
+    }
+
+    const canAccessPaidContent =
+      student.tier === "paid" || student.tier === "admin";
+    const isPaidCourse = subMode === "Paid";
+
+    if (canAccessPaidContent || (!isPaidCourse && student.tier === "free")) {
+      router.push(`/course/${courseId}`);
+    } else if (isPaidCourse && student.tier === "free") {
+      router.push(`/pricing`); // Consider adding a query parameter or state to provide feedback
+    }
+  };
 
   return (
     <>
@@ -85,9 +114,9 @@ const Read = () => {
               <React.Fragment key={course._id}>
                 <div
                   key={course._id}
-                  className=" card bg-citypop-500 transition-all hover:shadow-[-10px_10px_0px_black] hover:translate-x-[3px] hover:translate-y-[-3px] outline outline-1 rounded-md h-h-80 w-1/4"
+                  className=" card bg-citypop-500 transition-all hover:shadow-[-10px_10px_0px_black] hover:translate-x-[3px] hover:translate-y-[-3px] outline outline-1 rounded-md h-80 w-1/4"
                   onClick={() => {
-                    router.push(`/course/${course.courseId}`);
+                    handleEnroll(course.sub_Mode, course.courseId);
                   }}
                 >
                   <div className="border-b-2 bg-citypop-100 p-0.5 flex flex-row justify-between">
@@ -134,7 +163,7 @@ const Read = () => {
                   key={course._id}
                   className=" card bg-dodger_blue-700 transition-all hover:shadow-[-10px_10px_0px_black] hover:translate-x-[3px] hover:translate-y-[-3px] outline outline-1 rounded-md h-80 w-1/4"
                   onClick={() => {
-                    router.push(`/course/${course.courseId}`);
+                    handleEnroll(course.sub_Mode, course.courseId);
                   }}
                 >
                   <div className="border-b-2 bg-dodger_blue-900 p-0.5 flex flex-row justify-between">
