@@ -68,7 +68,6 @@ export async function POST(
       billing_address_collection: "auto",
       customer_email: subbingUser.email,
       success_url: `https://user-lms.vercel.app/pricing`,
-
       cancel_url: `https://user-lms.vercel.app/catalog`,
       line_items: [
         {
