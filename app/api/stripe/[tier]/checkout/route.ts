@@ -5,7 +5,7 @@ import Subscriptions from "@/models/userSub";
 import User from "@/models/user";
 import Price from "@/models/pricing";
 
-const redirectURL = "http://localhost:3000/pricing";
+const redirectURL = "http://user-lms.vercel.app/pricing";
 
 export async function POST(
   req: Request,
@@ -15,7 +15,7 @@ export async function POST(
   const session = await auth();
   try {
     if (!session) {
-      return NextResponse.redirect("http://localhost:3000/login");
+      return NextResponse.redirect("http://user-lms.vercel.app/login");
     }
     const sesh = session.user;
 
@@ -67,8 +67,9 @@ export async function POST(
       mode: "payment",
       billing_address_collection: "auto",
       customer_email: subbingUser.email,
-      success_url: `${process.env.WEB_URL}/pricing`,
-      cancel_url: `${process.env.WEB_URL}/catalog`,
+      success_url: `https://user-lms.vercel.app/pricing`,
+
+      cancel_url: `https://user-lms.vercel.app/catalog`,
       line_items: [
         {
           price_data: {
