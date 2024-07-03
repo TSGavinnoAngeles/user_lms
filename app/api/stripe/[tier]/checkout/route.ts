@@ -67,8 +67,8 @@ export async function POST(
       mode: "payment",
       billing_address_collection: "auto",
       customer_email: subbingUser.email,
-      success_url: `${process.env.WEB_URL}/pricing`,
-      cancel_url: `${process.env.WEB_URL}/catalog`,
+      success_url: `https://user-lms.vercel.app/pricing`,
+      cancel_url: `https://user-lms.vercel.app/catalog`,
       line_items: [
         {
           price_data: {
