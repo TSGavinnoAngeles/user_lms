@@ -29,10 +29,13 @@ const Pricing = () => {
 
   const subscribe = async (tier: string) => {
     try {
-      const response = await fetch(`/api/stripe/${tier}/checkout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
+      const response = await fetch(
+        `https://user-lms.vercel.app/api/stripe/${tier}/checkout`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       window.location.href = (await response.json()).url;
     } catch (error) {
       console.log(error);
