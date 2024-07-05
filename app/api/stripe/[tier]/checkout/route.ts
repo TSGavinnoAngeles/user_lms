@@ -11,6 +11,7 @@ export async function POST(
   req: Request,
   { params }: { params: { tier: string } }
 ) {
+  console.log(`just got in here. ${params.tier}`);
   const tier = params.tier;
   const session = await auth();
   try {

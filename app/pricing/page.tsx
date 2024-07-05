@@ -38,6 +38,7 @@ const Pricing = () => {
       console.log(error);
     }
   };
+
   return (
     <>
       <div className="min-h-screen">
