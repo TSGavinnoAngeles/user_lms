@@ -5,6 +5,8 @@ import TimeHeader from "../components/TimeHeader";
 import { BsCheck2Circle, BsCircle } from "react-icons/bs";
 import { getUserSub, Student } from "@/actions/student";
 import { getPrices, Prices } from "@/actions/payment";
+import axios from "axios";
+
 const Pricing = () => {
   const [loading, isloading] = useState(false);
   const [userSub, setUserSub] = useState<Student>();
@@ -29,11 +31,14 @@ const Pricing = () => {
 
   const subscribe = async (tier: string) => {
     try {
-      const response = await fetch(`/api/stripe/${tier}/checkout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-      window.location.href = (await response.json()).url;
+      const response = await axios.post(
+        `/api/stripe/${tier}/checkout`,
+        {},
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      window.location.href = response.data.url;
     } catch (error) {
       console.log(error);
     }
