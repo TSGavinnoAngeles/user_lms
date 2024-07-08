@@ -112,8 +112,8 @@ export const getEnrollmentStudent = async () => {
 
 export const unenrollStudent = async (courseId: string) => {
   try {
-    const session = await auth();
     await connectToDB();
+    const session = await auth();
 
     const student = await User.findOne({
       name: session?.user?.name,
@@ -122,7 +122,7 @@ export const unenrollStudent = async (courseId: string) => {
 
     const courseData = await Course.findOne({ courseId: courseId });
 
-    const enrollment = await Enrollment.findOneAndDelete({
+    await Enrollment.findOneAndDelete({
       course: courseData._id,
       student: student._id,
     });
