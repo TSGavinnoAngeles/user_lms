@@ -23,7 +23,6 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
       console.error(result.error);
     } else {
       setCourses(result);
-      setIsLoading(false);
     }
   };
 
@@ -42,9 +41,10 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
   };
 
   useEffect(() => {
-    fetchCourses();
-    isStudentEnrolled();
-    tier();
+    setIsLoading(true); // Step 2: Start loading
+    Promise.all([fetchCourses(), isStudentEnrolled(), tier()]).then(() => {
+      setIsLoading(false); // Step 3: Stop loading once all promises are resolved
+    });
   }, [params.courseId, isOpen]);
 
   useEffect(() => {
@@ -55,6 +55,37 @@ const Editor = ({ params }: { params: { courseId: string } }) => {
       redirect(`/pricing`);
     }
   }, [isLoading, courses]);
+
+  if (isLoading) {
+    // Step 4: Conditional rendering based on loading state
+    return (
+      <div>
+        <Navbar />
+        <div
+          className="hero min-h-[700px] z-0 outline outline-1 overflow-hidden bg-cover bg-center bg-no-repeat bg-opacity-90"
+          style={{
+            backgroundImage: "url('/Wallpapers/blueCitypop.png')",
+          }}
+        >
+          <div className="hero-content flex-row lg:flex-row-reverse">
+            <div className="card w-100 bg-citypop-200 outline outline-2 bg-opacity-95  shadow-[10px_10px_0_0_]">
+              <div className="border-b-2 bg-citypop-300 h-6 flex flex-row-reverse  ">
+                <button className="border-2 bg-citypop-400 w-7 m-2 rounded-full  ">
+                  {" "}
+                </button>
+                <button className="border-2 bg-citypop-600 w-7 m-2 rounded-full ">
+                  {" "}
+                </button>
+              </div>
+              <div className="card-body min-w-full">
+                <h2 className="card-title ">Wait a moment...</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
