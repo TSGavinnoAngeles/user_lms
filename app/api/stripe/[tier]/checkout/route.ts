@@ -12,9 +12,13 @@ export async function POST(
   { params }: { params: { tier: string } }
 ) {
   const tier = params.tier;
+  console.log("[Tier]: ", tier);
   const session = await auth();
   if (!session) {
-    return NextResponse.redirect("https://user-lms.vercel.app/login");
+    return (
+      NextResponse.redirect("https://user-lms.vercel.app/login"),
+      { status: 302 }
+    );
   }
   const sesh = session.user;
 
@@ -31,7 +35,11 @@ export async function POST(
     }
 
     if (subbingUser.tier === tierDetails.correspondingTier) {
-      return NextResponse.redirect("/catalog");
+      console.log("Already Subscribed to this tier");
+
+      return new NextResponse(JSON.stringify({ error: "Already Subbed" }), {
+        status: 404,
+      });
     }
 
     let userSubcription = await Subscriptions.findOne({ user: subbingUser });
