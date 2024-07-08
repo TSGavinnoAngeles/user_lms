@@ -30,6 +30,11 @@ export async function POST(
         status: 404,
       });
     }
+    if (!subbingUser) {
+      return new NextResponse(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
+    }
 
     if (subbingUser.tier === tierDetails.correspondingTier) {
       console.log("Already subbed");
