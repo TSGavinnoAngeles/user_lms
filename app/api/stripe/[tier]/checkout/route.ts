@@ -59,7 +59,7 @@ export async function POST(
       JSON.stringify({ url: stripeSession.url })
     );
 
-    return new NextResponse(JSON.stringify({ url: stripeSession.url }));
+    return NextResponse.json({ url: stripeSession.url });
   } catch (error: any) {
     console.error("[STRIPE ERROR]", error.message);
     return NextResponse.json(`${error}`, { status: 500 });
