@@ -32,11 +32,8 @@ export async function POST(
     }
 
     if (subbingUser.tier === tierDetails.correspondingTier) {
-      console.log("Already Subscribed to this tier");
-
-      return new NextResponse(JSON.stringify({ error: "Already Subbed" }), {
-        status: 400,
-      });
+      console.log("Already subbed");
+      return NextResponse.redirect("/catalog");
     }
 
     let userSubcription = await Subscriptions.findOne({ user: subbingUser });
@@ -64,7 +61,7 @@ export async function POST(
       JSON.stringify({ url: stripeSession.url })
     );
 
-    return NextResponse.json({ url: stripeSession.url }), { status: 200 };
+    return NextResponse.json({ url: stripeSession.url });
   } catch (error: any) {
     console.error("[STRIPE ERROR]", error.message);
     return NextResponse.json(`${error}`, { status: 500 });
