@@ -15,10 +15,7 @@ export async function POST(
   console.log("[Tier]: ", tier);
   const session = await auth();
   if (!session) {
-    return (
-      NextResponse.redirect("https://user-lms.vercel.app/login"),
-      { status: 302 }
-    );
+    return NextResponse.redirect("https://user-lms.vercel.app/login");
   }
   const sesh = session.user;
 
@@ -38,7 +35,7 @@ export async function POST(
       console.log("Already Subscribed to this tier");
 
       return new NextResponse(JSON.stringify({ error: "Already Subbed" }), {
-        status: 404,
+        status: 400,
       });
     }
 
@@ -67,7 +64,7 @@ export async function POST(
       JSON.stringify({ url: stripeSession.url })
     );
 
-    return NextResponse.json({ url: stripeSession.url });
+    return NextResponse.json({ url: stripeSession.url }), { status: 200 };
   } catch (error: any) {
     console.error("[STRIPE ERROR]", error.message);
     return NextResponse.json(`${error}`, { status: 500 });
