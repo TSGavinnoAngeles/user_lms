@@ -65,6 +65,8 @@ export const enrollStudent = async (
 
     await enrollment.save();
 
+    console.log("Enrolled Successfully");
+
     return { message: "Enrolled Successfully" };
   } catch (error) {
     return { error: error };
@@ -126,7 +128,7 @@ export const unenrollStudent = async (courseId: string) => {
       course: courseData._id,
       student: student._id,
     });
-
+    console.log("Unenrolled Successfully");
     return { message: "Unenrolled Successfully" };
   } catch (error) {
     return { error: error };
