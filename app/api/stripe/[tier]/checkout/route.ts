@@ -4,6 +4,7 @@ import { stripe } from "@/app/lib/stripe";
 import Subscriptions from "@/models/userSub";
 import User from "@/models/user";
 import Price from "@/models/pricing";
+import { connectToDB } from "@/app/lib/db";
 
 const redirectURL = "https://user-lms.vercel.app/pricing";
 
@@ -57,6 +58,7 @@ export async function POST(
   const sesh = session.user;
 
   try {
+    await connectToDB();
     const [subbingUser, tierDetails] = await Promise.all([
       User.findOne({ email: sesh?.email, name: sesh?.name }),
       Price.findOne({ tier: tier }),
