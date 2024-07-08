@@ -7,6 +7,43 @@ import Price from "@/models/pricing";
 
 const redirectURL = "https://user-lms.vercel.app/pricing";
 
+async function createStripeSession(
+  userSubcription: { stripeSubscriptionId: string; stripeCustomerId: string },
+  subbingUser: { email: string; _id: { toString: () => string } },
+  tierDetails: { tier: string; price: string; correspondingTier: string },
+  redirectURL: string
+) {
+  if (userSubcription && userSubcription.stripeSubscriptionId) {
+    return await stripe.billingPortal.sessions.create({
+      customer: userSubcription.stripeCustomerId,
+      return_url: redirectURL,
+    });
+  } else {
+    return await stripe.checkout.sessions.create({
+      mode: "payment",
+      billing_address_collection: "auto",
+      customer_email: subbingUser.email,
+      success_url: `https://user-lms.vercel.app/pricing`,
+      cancel_url: `https://user-lms.vercel.app/catalog`,
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: { name: `${tierDetails.tier} ` },
+            unit_amount: Number(tierDetails.price),
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        userId: subbingUser._id.toString(),
+        amount: `${tierDetails.price}`,
+        upgradeTo: `${tierDetails.correspondingTier}`,
+      },
+    });
+  }
+}
+
 export async function POST(
   req: Request,
   { params }: { params: { tier: string } }
@@ -24,6 +61,9 @@ export async function POST(
       User.findOne({ email: sesh?.email, name: sesh?.name }),
       Price.findOne({ tier: tier }),
     ]);
+
+    console.log("[Tier Details]: ", tierDetails);
+    console.log("[Subbing User]: ", subbingUser);
 
     if (!tierDetails) {
       return new NextResponse(JSON.stringify({ error: "Tier not found" }), {
@@ -70,42 +110,5 @@ export async function POST(
   } catch (error: any) {
     console.error("[STRIPE ERROR]", error.message);
     return NextResponse.json(`${error}`, { status: 500 });
-  }
-}
-
-async function createStripeSession(
-  userSubcription: { stripeSubscriptionId: string; stripeCustomerId: string },
-  subbingUser: { email: string; _id: { toString: () => string } },
-  tierDetails: { tier: string; price: string; correspondingTier: string },
-  redirectURL: string
-) {
-  if (userSubcription && userSubcription.stripeSubscriptionId) {
-    return await stripe.billingPortal.sessions.create({
-      customer: userSubcription.stripeCustomerId,
-      return_url: redirectURL,
-    });
-  } else {
-    return await stripe.checkout.sessions.create({
-      mode: "payment",
-      billing_address_collection: "auto",
-      customer_email: subbingUser.email,
-      success_url: `https://user-lms.vercel.app/pricing`,
-      cancel_url: `https://user-lms.vercel.app/catalog`,
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: { name: `${tierDetails.tier} ` },
-            unit_amount: Number(tierDetails.price),
-          },
-          quantity: 1,
-        },
-      ],
-      metadata: {
-        userId: subbingUser._id.toString(),
-        amount: `${tierDetails.price}`,
-        upgradeTo: `${tierDetails.correspondingTier}`,
-      },
-    });
   }
 }
