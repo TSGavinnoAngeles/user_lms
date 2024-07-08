@@ -64,9 +64,6 @@ export async function POST(
       Price.findOne({ tier: tier }),
     ]);
 
-    console.log("[Tier Details]: ", tierDetails);
-    console.log("[Subbing User]: ", subbingUser);
-
     if (!tierDetails) {
       return new NextResponse(JSON.stringify({ error: "Tier not found" }), {
         status: 404,

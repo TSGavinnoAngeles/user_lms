@@ -5,6 +5,7 @@ import { stripe } from "@/app/lib/stripe";
 import Subscriptions from "@/models/userSub";
 import User from "@/models/user";
 import { ObjectId } from "mongodb";
+import { connectToDB } from "@/app/lib/db";
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -14,6 +15,7 @@ export async function POST(req: Request) {
   const stripeEnv = process.env.STRIPE_WEBHOOK_SECRET;
 
   try {
+    await connectToDB();
     if (!stripeEnv) {
       return new NextResponse(
         `Webhook Error: Missing Stripe Secret ${process.env.STRIPE_WEBHOOK_SECRET}`,
