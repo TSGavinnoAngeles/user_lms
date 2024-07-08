@@ -54,6 +54,10 @@ export async function POST(
       tierDetails,
       redirectURL
     );
+    console.log(
+      "[Create Session Stripe]: ",
+      JSON.stringify({ url: stripeSession.url })
+    );
 
     return new NextResponse(JSON.stringify({ url: stripeSession.url }));
   } catch (error: any) {
