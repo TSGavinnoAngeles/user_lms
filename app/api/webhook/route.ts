@@ -11,13 +11,18 @@ export async function POST(req: Request) {
   const signature = headers().get("Stripe-Signature") as string;
 
   let event: Stripe.Event;
+  const stripeEnv = process.env.STRIPE_WEBHOOK_SECRET;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    if (!stripeEnv) {
+      return new NextResponse(
+        `Webhook Error: Missing Stripe Secret ${process.env.STRIPE_WEBHOOK_SECRET}`,
+        {
+          status: 400,
+        }
+      );
+    }
+    event = stripe.webhooks.constructEvent(body, signature, stripeEnv);
   } catch (error: any) {
     return new NextResponse(`Webhook Error: ${error.message} `, {
       status: 400,
